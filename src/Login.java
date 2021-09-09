@@ -10,11 +10,20 @@ import javax.servlet.http.HttpServletResponse;
 public class Login extends HttpServlet {
 	public void service(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		PrintWriter out = res.getWriter();
-		out.print("login");
+		out.println("login");
 		
-		DBO dbo = new DBO();
+		String userName = req.getParameter("username");
+		String password = req.getParameter("password");
+		DAO dao = new DAO();
 		try {
-			dbo.init();
+			boolean userFound = dao.verifyUser(userName, password);
+			if(!userFound) {
+				out.println("user not found");
+				return;
+			}
+			
+			out.println("welcome " + userName);
+			
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

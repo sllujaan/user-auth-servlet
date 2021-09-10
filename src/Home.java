@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-public class Login extends HttpServlet {
+public class Home extends HttpServlet {
 	
 	public void handleCookies(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		Cookie rck[] = req.getCookies();
@@ -30,22 +30,21 @@ public class Login extends HttpServlet {
 	public void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 		PrintWriter out = res.getWriter();
 		out.println("<h1>Login</h1>");
-		req.getRequestDispatcher("/LoginForm.html").include(req, res);
-		
 		
 		String userName = req.getParameter("username");
 		String password = req.getParameter("password");
 		DAO dao = new DAO();
 		try {
 			boolean userFound = dao.verifyUser(userName, password);
-//			if(!userFound) {
-//				req.getRequestDispatcher("user-not-found").forward(req, res);
-//				return;
-//			}
+			if(!userFound) {
+				req.getRequestDispatcher("user-not-found").forward(req, res);
+				return;
+			}
 			
 			
 			res.setContentType("text/html");
 			req.getRequestDispatcher("/links.html").include(req, res);
+			
 			
 			ServletContext sc = getServletContext();
 			String appVersion = sc.getInitParameter("appVersion");

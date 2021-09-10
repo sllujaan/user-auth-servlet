@@ -19,15 +19,23 @@ public class Welcome extends HttpServlet {
 		
 		if(rck != null) {
 			for(int i=0; i < rck.length; i++) {
+				System.out.println("-------------------------");
 				System.out.println("<br>"+rck[i].getName()+" "+rck[i].getValue());
+				System.out.println("-------------------------");
 			}
 		}
 	}
 	
 	
 	
+	public void verifySession(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		this.getCookies(req, res);
+	}
+	
 	public void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 		PrintWriter out = res.getWriter();
+		
+		this.verifySession(req, res);
 		
 		ServletContext sc = getServletContext();
 		String appVersion = sc.getInitParameter("appVersion");

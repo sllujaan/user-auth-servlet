@@ -41,9 +41,9 @@ public class LoginServlet extends HttpServlet {
 				return;
 			}
 			
-			
-			res.sendRedirect("welcome");
 			this.setCookies(req, res, userName);
+			res.sendRedirect("welcome");
+			
 			
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block

@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,11 +24,11 @@ public class Login extends HttpServlet {
 		Cookie ck = new Cookie("abc", "new values ---- ");
 		res.addCookie(ck);
 	}
+
 	
-	
-	public void service(HttpServletRequest req, HttpServletResponse res) throws IOException {
+	public void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 		PrintWriter out = res.getWriter();
-		out.println("login");
+		out.println("<h1>Login</h1>");
 		
 		String userName = req.getParameter("username");
 		String password = req.getParameter("password");
@@ -34,16 +36,29 @@ public class Login extends HttpServlet {
 		try {
 			boolean userFound = dao.verifyUser(userName, password);
 			if(!userFound) {
-				out.println("user not found");
+				req.getRequestDispatcher("user-not-found").forward(req, res);
 				return;
 			}
 			
-			out.println("welcome " + userName);
+			
+			res.setContentType("text/html");
+			req.getRequestDispatcher("/links.html").include(req, res);
+			
+			res.setStatus(200);
+			out.println("<h1>Welcome " + userName+"</h1>");
 			this.handleCookies(req, res);
 			
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void doGet(HttpServletRequest req, HttpServletResponse res) {
+		System.out.println("doGet Called.");
+	}
+	
+	public void doPost(HttpServletRequest req, HttpServletResponse res) {
+		System.out.println("doPost Called.");
 	}
 }

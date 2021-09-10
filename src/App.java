@@ -18,9 +18,8 @@ public class App extends HttpServlet {
 		PrintWriter out = res.getWriter();
 		
 		Util.setResponse(res, 200);
-		out.println("<h1>Home</h1>");
 		req.getRequestDispatcher("/links.html").include(req, res);
-		
+		out.println("<h1>Welcome Home</h1>");
 	}
 	
 	

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-public class UnautherizedUser extends HttpServlet {
+public class UnauthorizedUser extends HttpServlet {
 
 	
 	public void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
@@ -21,6 +21,6 @@ public class UnautherizedUser extends HttpServlet {
 		
 		Util.setResponse(res, 200);
 		req.getRequestDispatcher("/links.html").include(req, res);
-		req.getRequestDispatcher("/LoginForm.html").include(req, res);
+		out.println("<h1 style='color: red;'>Unauthorized User</h1>");
 	}
 }

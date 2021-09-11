@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
 		try {
 			boolean userFound = dao.verifyUser(userName, password);
 			if(!userFound) {
-				req.getRequestDispatcher("user-not-found").forward(req, res);
+				req.getRequestDispatcher("unauthorized-user").forward(req, res);
 				return;
 			}
 			

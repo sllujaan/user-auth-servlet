@@ -9,19 +9,15 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 public class LoginServlet extends HttpServlet {
 	
-	public void setCookies(HttpServletRequest req, HttpServletResponse res, String userName) throws IOException {
-		Cookie rck[] = req.getCookies();
-		
-		if(rck != null) {
-			for(int i=0; i < rck.length; i++) {
-				System.out.println("<br>"+rck[i].getName()+" "+rck[i].getValue());
-			}
-		}
-		
+	public void setSession(HttpServletRequest req, HttpServletResponse res, String userName) throws IOException {
+		HttpSession sess = req.getSession(true);
+		sess.setAttribute(sess.getId(), "12345");
+		sess.setAttribute("12345", userName);
 		Cookie ck = new Cookie("username", userName);
 		res.addCookie(ck);
 	}
@@ -41,7 +37,7 @@ public class LoginServlet extends HttpServlet {
 				return;
 			}
 			
-			this.setCookies(req, res, userName);
+			this.setSession(req, res, userName);
 			res.sendRedirect("welcome");
 			
 			

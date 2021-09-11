@@ -9,12 +9,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 public class Welcome extends HttpServlet {
 	
 	
-	public void getCookies(HttpServletRequest req, HttpServletResponse res) throws IOException {
+	public void getSession(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		Cookie rck[] = req.getCookies();
 		
 		if(rck != null) {
@@ -24,12 +25,39 @@ public class Welcome extends HttpServlet {
 				System.out.println("-------------------------");
 			}
 		}
+		
+		HttpSession sess = req.getSession(false);
+		System.out.println(sess.getAttribute(sess.getId()));
+		System.out.println(sess.getId());
+		
+	}
+	
+	public String getkeyValueFromCookies(HttpServletRequest req, String key) throws IOException {
+		Cookie rck[] = req.getCookies();
+		if(rck == null) return "";
+		
+		for(int i=0; i < rck.length; i++) {
+			if(rck[i].getName() == key) return rck[i].getValue();
+		}
+		
+		return "";
 	}
 	
 	
 	
-	public void verifySession(HttpServletRequest req, HttpServletResponse res) throws IOException {
-		this.getCookies(req, res);
+	public boolean verifySession(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		this.getSession(req, res);
+		
+		HttpSession sess = req.getSession(false);
+		String sessUUID = (String) sess.getAttribute(sess.getId());
+		sess.getAttribute(sessUUID);
+		String userId = getkeyValueFromCookies(req, "username");
+		
+		if(userId == "") return false;
+		
+		
+		
+		return true;
 	}
 	
 	public void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {

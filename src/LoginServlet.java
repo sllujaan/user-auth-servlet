@@ -54,7 +54,13 @@ public class LoginServlet extends HttpServlet {
 			
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 int errorCode = ((SQLException)e).getErrorCode();
+			 if(errorCode == 0) {
+				 Util.setResponse(res, 500);
+				 out.println("<h1>500 - Server Error (Database Connection failure)</h1>");
+				 out.println("<p>Please contact to administrator</p>");
+			 }
+			 e.printStackTrace();
 		}
 	}
 	

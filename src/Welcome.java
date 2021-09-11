@@ -22,12 +22,16 @@ public class Welcome extends HttpServlet {
 		
 		for(int i=0; i < rck.length; i++) {
 			if(rck[i].getName().trim().equals(key)) {
-				userName = rck[i].getValue();
 				return rck[i].getValue();
 			}
 		}
 		
 		return "";
+	}
+	
+	public void setCookie(HttpServletResponse res, String key, String value) {
+		Cookie ck = new Cookie(key, value);
+		res.addCookie(ck);
 	}
 	
 	
@@ -37,13 +41,18 @@ public class Welcome extends HttpServlet {
 		HttpSession sess = req.getSession(false);
 		if(sess == null) return false;
 		
-		String sessUUID = (String) sess.getAttribute(sess.getId());
-		String userIdSess = (String) sess.getAttribute(sessUUID);
-		String userId = getkeyValueFromCookies(req, "username");
 		
-		if(userId.trim().equals("")) return false;
-		if(!userId.trim().equals(userIdSess)) return false;
+		String uuidServer = (String) sess.getAttribute(sess.getId());
+		String uuidClient = (String) sess.getAttribute(uuidServer);
 		
+		String userID = getkeyValueFromCookies(req, "USERID");
+		
+		//if(userId.trim().equals("")) return false;
+		if(!uuidClient.equals(userID)) return false;
+		
+		
+		userName = (String) sess.getAttribute(sess.getId() + uuidServer);
+		setCookie(res, "USERNAME", userName);
 		return true;
 	}
 	

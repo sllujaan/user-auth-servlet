@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -15,11 +16,21 @@ import javax.servlet.http.HttpSession;
 public class LoginServlet extends HttpServlet {
 	
 	public void setSession(HttpServletRequest req, HttpServletResponse res, String userName) throws IOException {
+		String uuidServer = UUID.randomUUID().toString();
+		String uuidClient = UUID.randomUUID().toString();
 		HttpSession sess = req.getSession(true);
-		sess.setAttribute(sess.getId(), "12345");
-		sess.setAttribute("12345", userName);
-		Cookie ck = new Cookie("username", userName);
-		res.addCookie(ck);
+		
+		sess.setAttribute(sess.getId(), uuidServer);
+		sess.setAttribute(uuidServer, uuidClient);
+		sess.setAttribute(sess.getId() + uuidServer, userName);
+		
+		System.out.println(sess.getId() + uuidServer);
+		System.out.println("------===-------");
+		
+		Cookie ckUserId = new Cookie("USERID", uuidClient);
+		Cookie ckUserName = new Cookie("USERNAME", userName);
+		res.addCookie(ckUserId);
+		res.addCookie(ckUserName);
 	}
 
 	
@@ -33,7 +44,7 @@ public class LoginServlet extends HttpServlet {
 		try {
 			boolean userFound = dao.verifyUser(userName, password);
 			if(!userFound) {
-				req.getRequestDispatcher("unauthorized-user").forward(req, res);
+				req.getRequestDispatcher("user-not-found").forward(req, res);
 				return;
 			}
 			

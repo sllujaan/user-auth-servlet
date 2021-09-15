@@ -19,7 +19,7 @@ public class UnauthorizedUser extends HttpServlet {
 	public void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 		PrintWriter out = res.getWriter();
 		
-		Util.setResponse(res, 200);
+		Util.setResponse(res, 401);
 		req.getRequestDispatcher("/links.html").include(req, res);
 		out.println("<h1 style='color: red;'>Unauthorized User</h1>");
 	}

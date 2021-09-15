@@ -16,6 +16,7 @@ public class App extends HttpServlet {
 
 	public void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 		PrintWriter out = res.getWriter();
+		System.out.println(req.getRequestURI().substring(req.getContextPath().length()));
 		
 		Util.setResponse(res, 200);
 		req.getRequestDispatcher("/links.html").include(req, res);
